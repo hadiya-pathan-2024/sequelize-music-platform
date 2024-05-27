@@ -1,3 +1,4 @@
+const { where } = require('sequelize');
 const db = require('../models/index');
 const {users} = db;
 
@@ -21,14 +22,32 @@ async function getUser(){
     }
 }
 
-async function updateUser(update){
+async function getUserByWhere(userId){
     try {
-        const update = await users.update(update);
-        return update;
+        const findUsers = await users.findAll({
+            where: {
+                id: userId
+            }
+        });
+        return findUsers;
+    } catch (error) {
+        console.log("Error getting users", error);
+        throw error;
+    }
+}
+
+async function updateUser(updateId){
+    try {
+        const updateRes = await users.update({
+            where:{
+                id: updateId
+            }
+        });
+        return updateRes;
     } catch (error) {
         console.log("Error updating user", error);
         throw error;
     }
 }
 
-module.exports = {createUser, getUser,updateUser }
+module.exports = {createUser, getUser,updateUser,getUserByWhere }

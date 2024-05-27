@@ -11,12 +11,14 @@
     }
 </style>
 <body>
+    <h2>All Users</h2>
     <table>
         <tr>
             <th>Id</th>
             <th>Name</th>
             <th>Email</th>
             <th>Update</th>
+            <th>Delete</th>
         </tr>
         <% allUsers.forEach(user => { %>
             <tr>
@@ -24,6 +26,7 @@
                 <td><%= user.first_name %></td>
                 <td><%= user.email %></td>
                 <td><a href="/register/update/<%= user.id %>">Update</a></td>
+                <td><a href="/register/delete/<%= user.id %>">Delete</a></td>
             </tr>
         <% }) %>  
     </table>

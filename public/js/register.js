@@ -16,5 +16,8 @@ async function Data(){
         body: data
     });
 }
-
-submitButton.addEventListener("click", () => Data());
+async function validate(){
+   await Data()
+    window.location.href = "/register/getUsers"
+}
+submitButton.addEventListener("click", () => validate());
