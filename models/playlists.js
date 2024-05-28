@@ -18,6 +18,9 @@ module.exports = (sequelize, DataTypes) => {
     user_id: DataTypes.INTEGER,
     name: DataTypes.STRING
   }, {
+    createdAt: 'created_at',
+    updatedAt: 'updated_at',
+    deletedAt: 'deleted_at',
     paranoid: true,
     sequelize,
     modelName: 'playlists',

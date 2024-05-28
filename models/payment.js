@@ -19,6 +19,9 @@ module.exports = (sequelize, DataTypes) => {
     payment_date: DataTypes.DATE,
     amount: DataTypes.INTEGER
   }, {
+    createdAt: 'created_at',
+    updatedAt: 'updated_at',
+    deletedAt: 'deleted_at',
     sequelize,
     modelName: 'payment',
   });

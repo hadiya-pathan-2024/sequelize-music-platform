@@ -18,6 +18,9 @@ module.exports = (sequelize, DataTypes) => {
     user_id: DataTypes.INTEGER,
     tracks_id: DataTypes.INTEGER
   }, {
+    createdAt: 'created_at',
+    updatedAt: 'updated_at',
+    deletedAt: 'deleted_at',
     sequelize,
     modelName: 'likes',
   });

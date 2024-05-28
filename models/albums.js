@@ -25,6 +25,9 @@ module.exports = (sequelize, DataTypes) => {
         fields: ['name','release_date']
       }
     ],
+    createdAt: 'created_at',
+    updatedAt: 'updated_at',
+    deletedAt: 'deleted_at',
     paranoid: true,
     sequelize,
     modelName: 'albums',

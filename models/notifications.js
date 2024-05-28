@@ -19,6 +19,9 @@ module.exports = (sequelize, DataTypes) => {
     content: DataTypes.STRING,
     creation_date: DataTypes.DATE
   }, {
+    createdAt: 'created_at',
+    updatedAt: 'updated_at',
+    deletedAt: 'deleted_at',
     paranoid: true,
     sequelize,
     modelName: 'notifications',

@@ -17,6 +17,9 @@ module.exports = (sequelize, DataTypes) => {
     user_id: DataTypes.INTEGER,
     premium_feature_id: DataTypes.INTEGER
   }, {
+    createdAt: 'created_at',
+    updatedAt: 'updated_at',
+    deletedAt: 'deleted_at',
     sequelize,
     modelName: 'users_premium_features',
   });

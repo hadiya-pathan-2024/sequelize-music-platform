@@ -11,6 +11,7 @@ async function insertUser(req, res) {
     const { id, fname, lname, email, pwd, dob } = req.body;
     console.log("response: ", req.body);
     if (id) {
+        const t = db.sequelize.transaction();
         try {
             const updateUsersave = await users.update(
                 {
@@ -24,16 +25,19 @@ async function insertUser(req, res) {
                     where: {
                         id: id
                     }
-                }
+                },
+                {transaction:t}
             )
+            await t.commit();
             return generalResponse(
                 res,
                 updateUsersave,
                 "User updated successfully!",
                 true
-            )
+            )  
         } catch (error) {
             console.log("Error updating user", error);
+            await t.rollback();
             return generalResponse(
                 res,
                 { success: false },
@@ -44,8 +48,12 @@ async function insertUser(req, res) {
         }
     }
     else {
+        const t = db.sequelize.transaction();
         try {
-            const newUser = await createUser({ first_name: fname, last_name: lname, email: email, password: pwd, dob: dob });
+            const newUser = await createUser({ first_name: fname, last_name: lname, email: email, password: pwd, dob: dob },
+                {transaction:t}
+            );
+            await t.commit();
             return generalResponse(
                 res,
                 newUser,
@@ -53,6 +61,7 @@ async function insertUser(req, res) {
                 true
             );
         } catch (error) {
+            await t.rollback();
             console.log("Error inserting user", error);
             return generalResponse(
                 res,
@@ -88,15 +97,17 @@ async function getUsers(req, res) {
 }
 
 async function editUser(req, res) {
+    const t = db.sequelize.transaction();
     try {
         const userId = req.params.id;
         if (userId) {
-            const updateUsers = await getUserByWhere(userId);
+            const updateUsers = await getUserByWhere(userId, {transaction:t});
             res.render("register", { data: updateUsers[0] })
         }
-
+        await t.commit();
     } catch (error) {
         console.log("Error", error);
+        await t.rollback();
         return generalResponse(
             res,
             { success: false },
@@ -107,6 +118,7 @@ async function editUser(req, res) {
     }
 }
 async function deleteUser(req,res){
+    const t = db.sequelize.transaction();
    try {
      const id = req.params.id;
      const deleteResult = await users.destroy({
@@ -114,6 +126,7 @@ async function deleteUser(req,res){
              id: id
          }
      })
+     await t.commit();
      return generalResponse(
         res,
         deleteResult,
@@ -122,6 +135,7 @@ async function deleteUser(req,res){
      )
    } catch (error) {
     console.log("Error deleting user", error);
+    await t.rollback();
     return generalResponse(
         res,
         { success: false },
@@ -131,28 +145,5 @@ async function deleteUser(req,res){
     )
    }
 }
-// async function updateUserSave(){
-//     try {
-//         const {fname,lname,email,pwd,dob} = req.body;
-//        const updateSave = await updateUser({
-//         first_name: fname
-//        });
-//        return generalResponse(
-//         res,
-//         updateSave,
-//         "User updated successfully!",
-//         true
-//        ) 
-//     } catch (error) {
-//         console.log("Error updating user", error);
-//         return generalResponse(
-//             res,
-//             {success: false},
-//             "Something went wrong while updating user",
-//             "error",
-//             true
-//         );
-//     }
-// }
 
 module.exports = { register, insertUser, getUsers, editUser , deleteUser}
